@@ -9,12 +9,17 @@ const Product =require('./models/products')
 const app=express()
 const port= process.env.PORT || 3000
 
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json())
 
 //creacion de peticion tipo get
 app.get('/api/product',(req,res) =>{
-    res.send(200,{products:[]})
+    Product.find({},(err,products) =>{
+        if (err)return res.status(500).send({message:`Error al realizar la petición: ${err}`})
+        if (!products) return res.status(404).send({message:`No existen productos`})
+        res.status(200).send({products})
+    })
+    
 })
 //para acceder a un unico recurso
 app.get('/api/product/:productid',(req,res) =>{
@@ -29,7 +34,7 @@ app.get('/api/product/:productid',(req,res) =>{
 
 })
 //actualizaciones
-app.put('/api/product/productid',(req,res) =>{
+app.put('/api/product/:productid',(req,res) =>{
 
 
 })
@@ -57,8 +62,19 @@ app.post('/api/product',(req,res) =>{
 })
 
 //borrar un producto de la base de datos
-app.delete('/api/product/productid',(req,res) =>{
+app.delete('/api/product/:productid',(req,res) =>{
 
+    let productid = req.params.productid
+    
+    Product.findById(productid,(err,product) =>{
+
+        if(err)  return res.status(500).send({message:`Error al borrar el producto : ${err}`})
+        
+        product.remove(err =>{
+            if(err)  return res.status(500).send({message:`Error al borrar el producto : ${err}`})
+            res.status(200).send({message:`El producto ha sido eliminado exitosamente =D `})
+        })
+    })
 })
 
 mongoose.connect('mongodb://localhost:27017/shop',{ useNewUrlParser: true, useUnifiedTopology: true  },(err,res) =>{
