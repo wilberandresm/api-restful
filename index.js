@@ -36,6 +36,12 @@ app.get('/api/product/:productid',(req,res) =>{
 //actualizaciones
 app.put('/api/product/:productid',(req,res) =>{
 
+    let productid= req.params.productid
+    let update=req.body
+    Product.findByIdAndUpdate(productid,update,(err,productUpdated)=>{
+        if (err)  return res.status(500).send({message:`Error al actualizar el producto : ${err}`})
+        res.status(200).send( {product:productUpdated})
+    })
 
 })
 
@@ -77,7 +83,7 @@ app.delete('/api/product/:productid',(req,res) =>{
     })
 })
 
-mongoose.connect('mongodb://localhost:27017/shop',{ useNewUrlParser: true, useUnifiedTopology: true  },(err,res) =>{
+mongoose.connect('mongodb://localhost:27017/shop',{ useNewUrlParser: true, useUnifiedTopology: true , useFindAndModify: false},(err,res) =>{
     if(err){
         return console.log(`error al conectar a la base de datos: ${err}`)
     }
