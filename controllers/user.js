@@ -26,7 +26,7 @@ function signIn(req,res){
         res.status(200).send({
             message: 'Te has loggeado correctamente',
             //enviar el token
-            token: serive.createToken(user)
+            token: service.createToken(user)
         })
     })
 
