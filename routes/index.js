@@ -2,6 +2,8 @@
 
 const express=require('express')
 const ProductCtrl=require('../controllers/product')
+const userCtrl = require('../controllers/user')
+const auth=require('../middlewares/auth')
 const api= express.Router()
 
 //creacion de peticion tipo get
@@ -14,5 +16,10 @@ api.put('/product/:productid',ProductCtrl.updateProduct)
 api.post('/product',ProductCtrl.saveProduct)
 //borrar un producto de la base de datos
 api.delete('/product/:productid',ProductCtrl.deleteProduct)
+api.post('/signup',userCtrl.signUp)
+api.post('/signin',userCtrl.signIn)
+api.get('/private', auth, function(req,res){
+    res.status(200).send({message:'Tienes acceso'})
+})
 
 module.exports = api
