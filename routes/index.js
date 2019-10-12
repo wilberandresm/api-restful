@@ -11,11 +11,11 @@ api.get('/product',ProductCtrl.getProducts)
 //para acceder a un unico recurso
 api.get('/product/:productid',ProductCtrl.getProduct)
 //actualizaciones
-api.put('/product/:productid',ProductCtrl.updateProduct)
+api.put('/product/:productid',auth,ProductCtrl.updateProduct)
 //ruta de tipo post para subir nuestros productos
-api.post('/product',ProductCtrl.saveProduct)
+api.post('/product',auth, ProductCtrl.saveProduct)
 //borrar un producto de la base de datos
-api.delete('/product/:productid',ProductCtrl.deleteProduct)
+api.delete('/product/:productid',auth,ProductCtrl.deleteProduct)
 api.post('/signup',userCtrl.signUp)
 api.post('/signin',userCtrl.signIn)
 api.get('/private', auth, function(req,res){
